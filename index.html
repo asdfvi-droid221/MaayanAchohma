@@ -6,42 +6,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-font-family:Arial;
-background:#f5f7fa;
-margin:0;
-padding:0;
-}
-.box{
-max-width:700px;
-margin:40px auto;
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-text-align:center;
-}
-h1{color:#1f2937;}
-p{color:#374151;line-height:1.7;}
-.btn{
-background:#2563eb;
-color:white;
-padding:16px 28px;
-border:none;
-border-radius:8px;
-font-size:18px;
-cursor:pointer;
-margin-top:20px;
-}
-.small{
-font-size:14px;
-color:#6b7280;
-margin-top:20px;
-}
-.logo{
-max-width:220px;
-margin-bottom:20px;
-}
+  body{
+    font-family:Arial;
+    background:#f5f7fa;
+    margin:0;
+    padding:0;
+  }
+  .box{
+    max-width:700px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    text-align:center;
+  }
+  h1{color:#1f2937;}
+  p{color:#374151;line-height:1.7;}
+  .btn{
+    background:#2563eb;
+    color:white;
+    padding:16px 28px;
+    border:none;
+    border-radius:8px;
+    font-size:18px;
+    cursor:pointer;
+    margin-top:20px;
+  }
+  .small{
+    font-size:14px;
+    color:#6b7280;
+    margin-top:20px;
+  }
+  .logo{
+    max-width:220px;
+    margin-bottom:20px;
+  }
 </style>
 </head>
 
@@ -49,52 +49,114 @@ margin-bottom:20px;
 
 <div class="box">
 
-<img src="logo.png" class="logo" alt="ישיבת מעיין החכמה">
+  <img src="logo.png" class="logo" alt="ישיבת מעיין החכמה">
 
-<h1>ישיבת מעיין החכמה</h1>
+  <h1>ישיבת מעיין החכמה</h1>
 
-<p>
-עמותה רשומה מספר: <b>580746626</b>
-</p>
+  <p>
+    עמותה רשומה מספר: <b>580746626</b>
+  </p>
 
-<p>
-אנו פועלים לקידום פעילות חינוכית וקהילתית בעיר אופקים
-ובכלל.
-</p>
+  <p>
+    אנו פועלים לקידום פעילות חינוכית וקהילתית בעיר אופקים ובכלל.
+  </p>
 
-<p>
-<b>מטרות העמותה:</b><br>
-הקמת ישיבה גדולה ספרדית בעיר אופקים,  
-כולל אברכים, תלמוד תורה לילדים,  
-שיעורים, הרצאות וימי עיון לציבור הרחב,  
-פעילות רווחה וחסד בקהילה,  
-סיוע למשפחות ותמיכה בעמותות וחל"צ בעלי מטרות דומות.
-</p>
+  <p>
+    <b>מטרות העמותה:</b><br>
+    הקמת ישיבה גדולה ספרדית בעיר אופקים,<br>
+    כולל אברכים, תלמוד תורה לילדים,<br>
+    שיעורים, הרצאות וימי עיון לציבור הרחב,<br>
+    פעילות רווחה וחסד בקהילה,<br>
+    ותמיכה בעמותות וחל"צ בעלי מטרות דומות.
+  </p>
 
-<p>
-התרומה מתבצעת בצורה מאובטחת דרך מערכת התשלומים GROW.
-</p>
+  <p>
+    התרומה מתבצעת בצורה מאובטחת דרך מערכת התשלומים GROW.
+  </p>
 
-<button class="btn" onclick="goDonate()">
-תרומה מאובטחת דרך GROW
-</button>
+  <button class="btn" onclick="goDonate()">
+    תרומה מאובטחת דרך GROW
+  </button>
 
-<p class="small">
-לא נאסף מידע אישי בדף זה.  
-המעבר לתשלום מתבצע בלחיצה בלבד.
-</p>
+  <p class="small">
+    לא נאסף מידע אישי בדף זה. המעבר לתשלום מתבצע בלחיצה בלבד.
+  </p>
 
-<p class="small">
-לפניות:  
-mh0548487625@gmail.com
-</p>
+  <p class="small">
+    לפניות: mh0548487625@gmail.com
+  </p>
 
 </div>
 
 <script>
-function goDonate(){
-window.location.href="https://pay.grow.link/f08e9f6bc0b22c930b700b0d98b64085-Mjg1MDI3Nw";
-}
+  // ====== CONFIG (תשנה רק כאן) ======
+  const CLICK_WEBAPP = "PASTE_YOUR_APPS_SCRIPT_EXEC_HERE"; // לדוגמה: https://script.google.com/macros/s/XXXX/exec
+  const KEY = "dor2026grow";
+
+  const GROW_PAY_URL = "https://pay.grow.link/f08e9f6bc0b22c930b700b0d98b64085-Mjg1MDI3Nw";
+  // ==================================
+
+  function qp(name){
+    const u = new URL(window.location.href);
+    return (u.searchParams.get(name) || "").trim();
+  }
+
+  function getStored(key){
+    try { return (localStorage.getItem(key) || "").trim(); } catch(e){ return ""; }
+  }
+  function setStored(key, val){
+    try { if(val) localStorage.setItem(key, val); } catch(e){}
+  }
+
+  // 1) שמירת מזהים אם הגיעו ב-URL
+  (function storeClickIds(){
+    const gclid  = qp("gclid");
+    const wbraid = qp("wbraid");
+    const gbraid = qp("gbraid");
+
+    if (gclid)  setStored("gclid", gclid);
+    if (wbraid) setStored("wbraid", wbraid);
+    if (gbraid) setStored("gbraid", gbraid);
+  })();
+
+  // 2) רישום קליק ל-CLICKS דרך Apps Script (כ"פיקסל" כדי להימנע מבעיות CORS)
+  (function logClickToSheet(){
+    if (!CLICK_WEBAPP || CLICK_WEBAPP.indexOf("http") !== 0) return;
+
+    const gclid  = qp("gclid")  || getStored("gclid");
+    const wbraid = qp("wbraid") || getStored("wbraid");
+    const gbraid = qp("gbraid") || getStored("gbraid");
+
+    const ua = (navigator.userAgent || "").slice(0,120);
+
+    const url =
+      CLICK_WEBAPP +
+      "?mode=click" +
+      "&key=" + encodeURIComponent(KEY) +
+      "&gclid=" + encodeURIComponent(gclid) +
+      "&wbraid=" + encodeURIComponent(wbraid) +
+      "&gbraid=" + encodeURIComponent(gbraid) +
+      "&landing=" + encodeURIComponent("github") +
+      "&src=" + encodeURIComponent("google") +
+      "&ua=" + encodeURIComponent(ua);
+
+    const img = new Image();
+    img.src = url;
+  })();
+
+  // 3) מעבר לתשלום + העברת הפרמטרים (אם יש) ל-GROW
+  function goDonate(){
+    const gclid  = getStored("gclid");
+    const wbraid = getStored("wbraid");
+    const gbraid = getStored("gbraid");
+
+    const u = new URL(GROW_PAY_URL);
+    if (gclid)  u.searchParams.set("gclid", gclid);
+    if (wbraid) u.searchParams.set("wbraid", wbraid);
+    if (gbraid) u.searchParams.set("gbraid", gbraid);
+
+    window.location.href = u.toString();
+  }
 </script>
 
 </body>
