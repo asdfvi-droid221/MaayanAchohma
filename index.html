@@ -1,23 +1,28 @@
 <script>
-  // ====== CONFIG (תשנה רק כאן) ======
+  // ====== CONFIG ======
   const CLICK_WEBAPP = "https://script.google.com/macros/s/AKfycbwbvehBfJXJ3ankDdxmaeyrNyUxF4mMSdHwYiL0h7Wce-hN-UCC_D1xAdeuZQTT2S4S/exec";
   const KEY = "dor2026grow";
   const GROW_PAY_URL = "https://pay.grow.link/f08e9f6bc0b22c930b700b0d98b64085-Mjg1MDI3Nw";
-  // ==================================
+  // ====================
 
   function qp(name){
-    const u = new URL(window.location.href);
-    return (u.searchParams.get(name) || "").trim();
+    try {
+      const u = new URL(window.location.href);
+      return (u.searchParams.get(name) || "").trim();
+    } catch(e) {
+      return "";
+    }
   }
 
   function getStored(key){
     try { return (localStorage.getItem(key) || "").trim(); } catch(e){ return ""; }
   }
+
   function setStored(key, val){
     try { if(val) localStorage.setItem(key, val); } catch(e){}
   }
 
-  // 1) שמירת מזהים אם הגיעו ב-URL
+  // 1) שמירת מזהים מה-URL
   (function storeClickIds(){
     const gclid  = qp("gclid");
     const wbraid = qp("wbraid");
@@ -28,7 +33,7 @@
     if (gbraid) setStored("gbraid", gbraid);
   })();
 
-  // 2) רישום קליק ל-CLICKS דרך Apps Script (אמין + שולח רק אם יש מזהה)
+  // 2) שליחת קליק ל-Clicks (אמין)
   (function logClickToSheet(){
     if (!CLICK_WEBAPP || CLICK_WEBAPP.indexOf("http") !== 0) return;
 
@@ -36,7 +41,7 @@
     const wbraid = qp("wbraid") || getStored("wbraid");
     const gbraid = qp("gbraid") || getStored("gbraid");
 
-    // ✅ אם אין אף מזהה — לא שולחים בכלל
+    // אם אין מזהים — לא שולחים
     if (!gclid && !wbraid && !gbraid) return;
 
     const ua = (navigator.userAgent || "").slice(0,120);
@@ -54,22 +59,27 @@
 
     const url = CLICK_WEBAPP + "?" + params.toString();
 
-    // ✅ הכי אמין
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(url);
-    } else {
-      const img = new Image();
-      img.src = url;
+    // הכי אמין
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+      } else {
+        const img = new Image();
+        img.src = url;
+      }
+    } catch(e) {
+      console.warn("click log failed", e);
     }
   })();
 
-  // 3) מעבר לתשלום + העברת הפרמטרים (אם יש) ל-GROW
+  // 3) מעבר לתשלום
   function goDonate(){
     const gclid  = getStored("gclid");
     const wbraid = getStored("wbraid");
     const gbraid = getStored("gbraid");
 
     const u = new URL(GROW_PAY_URL);
+
     if (gclid)  u.searchParams.set("gclid", gclid);
     if (wbraid) u.searchParams.set("wbraid", wbraid);
     if (gbraid) u.searchParams.set("gbraid", gbraid);
