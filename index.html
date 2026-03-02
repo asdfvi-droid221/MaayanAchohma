@@ -1,98 +1,7 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>ישיבת מעיין החכמה – תרומה</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<style>
-  body{
-    font-family:Arial;
-    background:#f5f7fa;
-    margin:0;
-    padding:0;
-  }
-  .box{
-    max-width:700px;
-    margin:40px auto;
-    background:white;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
-    text-align:center;
-  }
-  h1{color:#1f2937;}
-  p{color:#374151;line-height:1.7;}
-  .btn{
-    background:#2563eb;
-    color:white;
-    padding:16px 28px;
-    border:none;
-    border-radius:8px;
-    font-size:18px;
-    cursor:pointer;
-    margin-top:20px;
-  }
-  .small{
-    font-size:14px;
-    color:#6b7280;
-    margin-top:20px;
-  }
-  .logo{
-    max-width:220px;
-    margin-bottom:20px;
-  }
-</style>
-</head>
-
-<body>
-
-<div class="box">
-
-  <img src="logo.png" class="logo" alt="ישיבת מעיין החכמה">
-
-  <h1>ישיבת מעיין החכמה</h1>
-
-  <p>
-    עמותה רשומה מספר: <b>580746626</b>
-  </p>
-
-  <p>
-    אנו פועלים לקידום פעילות חינוכית וקהילתית בעיר אופקים ובכלל.
-  </p>
-
-  <p>
-    <b>מטרות העמותה:</b><br>
-    הקמת ישיבה גדולה ספרדית בעיר אופקים,<br>
-    כולל אברכים, תלמוד תורה לילדים,<br>
-    שיעורים, הרצאות וימי עיון לציבור הרחב,<br>
-    פעילות רווחה וחסד בקהילה,<br>
-    ותמיכה בעמותות וחל"צ בעלי מטרות דומות.
-  </p>
-
-  <p>
-    התרומה מתבצעת בצורה מאובטחת דרך מערכת התשלומים GROW.
-  </p>
-
-  <button class="btn" onclick="goDonate()">
-    תרומה מאובטחת דרך GROW
-  </button>
-
-  <p class="small">
-    לא נאסף מידע אישי בדף זה. המעבר לתשלום מתבצע בלחיצה בלבד.
-  </p>
-
-  <p class="small">
-    לפניות: mh0548487625@gmail.com
-  </p>
-
-</div>
-
 <script>
   // ====== CONFIG (תשנה רק כאן) ======
   const CLICK_WEBAPP = "https://script.google.com/macros/s/AKfycbwbvehBfJXJ3ankDdxmaeyrNyUxF4mMSdHwYiL0h7Wce-hN-UCC_D1xAdeuZQTT2S4S/exec";
   const KEY = "dor2026grow";
-
   const GROW_PAY_URL = "https://pay.grow.link/f08e9f6bc0b22c930b700b0d98b64085-Mjg1MDI3Nw";
   // ==================================
 
@@ -119,7 +28,7 @@
     if (gbraid) setStored("gbraid", gbraid);
   })();
 
-  // 2) רישום קליק ל-CLICKS דרך Apps Script (כ"פיקסל" כדי להימנע מבעיות CORS)
+  // 2) רישום קליק ל-CLICKS דרך Apps Script (אמין + שולח רק אם יש מזהה)
   (function logClickToSheet(){
     if (!CLICK_WEBAPP || CLICK_WEBAPP.indexOf("http") !== 0) return;
 
@@ -127,21 +36,31 @@
     const wbraid = qp("wbraid") || getStored("wbraid");
     const gbraid = qp("gbraid") || getStored("gbraid");
 
+    // ✅ אם אין אף מזהה — לא שולחים בכלל
+    if (!gclid && !wbraid && !gbraid) return;
+
     const ua = (navigator.userAgent || "").slice(0,120);
 
-    const url =
-      CLICK_WEBAPP +
-      "?mode=click" +
-      "&key=" + encodeURIComponent(KEY) +
-      "&gclid=" + encodeURIComponent(gclid) +
-      "&wbraid=" + encodeURIComponent(wbraid) +
-      "&gbraid=" + encodeURIComponent(gbraid) +
-      "&landing=" + encodeURIComponent("github") +
-      "&src=" + encodeURIComponent("google") +
-      "&ua=" + encodeURIComponent(ua);
+    const params = new URLSearchParams({
+      mode: "click",
+      key: KEY,
+      gclid: gclid,
+      wbraid: wbraid,
+      gbraid: gbraid,
+      landing: "github",
+      src: "google",
+      ua: ua
+    });
 
-    const img = new Image();
-    img.src = url;
+    const url = CLICK_WEBAPP + "?" + params.toString();
+
+    // ✅ הכי אמין
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url);
+    } else {
+      const img = new Image();
+      img.src = url;
+    }
   })();
 
   // 3) מעבר לתשלום + העברת הפרמטרים (אם יש) ל-GROW
@@ -158,7 +77,3 @@
     window.location.href = u.toString();
   }
 </script>
-
-</body>
-</html>
-
